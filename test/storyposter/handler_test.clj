@@ -1,7 +1,7 @@
 (ns storyposter.handler-test
   (:require [clojure.test :refer :all]
             [ring.mock.request :as mock]
-            [storyposter.handler :refer :all]))
+            [storyposter.server :refer :all]))
 
 (deftest test-app
   (testing "main route"
