@@ -4,4 +4,4 @@
 
 (s/defschema UserSchema
   "Schema for user request data"
-  {:username s/Str :password s/Str})
+  {(s/required-key :username) s/Str  (s/required-key :password) s/Str})
