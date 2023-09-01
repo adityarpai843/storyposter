@@ -1,11 +1,8 @@
-(ns storyposter.handler
-  (:require [compojure.core :refer :all]
-            [compojure.route :as route]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
-
-(defroutes app-routes
-  (GET "/" [] "Hello World")
-  (route/not-found "Not Found"))
+(ns storyposter.server
+  (:require [ring.middleware.json :as middleware]
+            [storyposter.routes :refer [app-routes]]))
 
 (def app
-  (wrap-defaults app-routes site-defaults))
+  (-> app-routes
+      (middleware/wrap-json-body {:key-fn keyword})
+      (middleware/wrap-json-response)))
