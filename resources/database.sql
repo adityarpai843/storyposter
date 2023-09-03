@@ -20,8 +20,9 @@ CREATE TABLE "users" (
 CREATE TABLE "stories" (
   "id" serial PRIMARY KEY,
   "title" varchar,
-  "current_status" status NOT NULL,
+  "status" enum,
   "user_id" integer,
+  "created_by" integer,
   "created_at" timestamp
 );
 
