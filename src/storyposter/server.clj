@@ -1,8 +1,8 @@
 (ns storyposter.server
   (:require [ring.middleware.json :as middleware]
-            [storyposter.routes :refer [app-routes user-routes]]))
+            [storyposter.routes :refer [all-routes]]))
 
 (def app
-  (-> user-routes
+  (-> all-routes
       (middleware/wrap-json-body {:key-fn keyword})
       (middleware/wrap-json-response)))
