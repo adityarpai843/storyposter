@@ -7,7 +7,8 @@
 (def all-routes
   (routes
     (GET "/v1/stories" request (s/get-recent-stories))
-    (POST "/v1/user/login" request (create-user-handler (:body request)))
+    (GET "/" [] "Hello World")
+    (POST "/v1/user/login" request (create-user-handler request))
     (-> (context "/v1/story" []
           (POST "/" request)
           (PATCH "/:story-id" request)

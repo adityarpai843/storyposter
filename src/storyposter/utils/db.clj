@@ -5,9 +5,7 @@
 (defn get-user-id
   "Given API key get the user's ID"
   [api_key]
-  (let [user-id (t2/select :conn db-spec "users" {:select [:users.id]
-                                                  :from   [:users]
-                                                  :where  [= :api-key api_key]})]
+  (let [user-id (t2/select :conn db-spec "users" :api-key api_key)]
     user-id))
 
 (defn check-user-existence?

@@ -5,10 +5,10 @@
             [storyposter.users.validation :refer [UserSchema]]))
 (defn create-user-handler
   "Handler for creating a user and returning API key"
-  [request-body]
-  (let [validate-schema (s/check UserSchema request-body)]
+  [{:keys [body]}]
+  (let [validate-schema (s/check UserSchema body)]
     (if (not validate-schema)
-      (created {:api-key (->> request-body
+      (created {:api-key (->> body
                               db/create-user)})
       (bad-request {:error (str "Field" (keys validate-schema) (vals validate-schema))}))))
 
