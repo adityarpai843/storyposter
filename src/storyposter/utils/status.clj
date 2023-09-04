@@ -23,3 +23,9 @@
   [body]
   {:status 204
    :body   body})
+
+(defn unauthorized
+  "Denotes 401 unauthorized"
+  []
+  {:status 401
+   :body {:error "User Unauthorized"}})

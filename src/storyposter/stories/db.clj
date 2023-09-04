@@ -8,3 +8,13 @@
   (t2/select :conn db-spec "stories" {:select [:stories.title]
                                       :from   [:stories]
                                       :order-by [:created-at]}))
+
+(defn create-user-story-parts
+  "Creates user story parts"
+  []
+
+  )
+(defn create-user-stories
+  "Create user stories"
+  []
+  )
