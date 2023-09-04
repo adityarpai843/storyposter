@@ -19,11 +19,11 @@ CREATE TABLE "users" (
 
 CREATE TABLE "stories" (
   "id" serial PRIMARY KEY,
-  "title" varchar,
-  "status" enum,
+  "title" varchar NOT NULL,
+  "status" status,
   "user_id" integer,
-  "created_by" integer,
-  "created_at" timestamp
+  "created_by" integer NOT NULL,
+  "created_at" timestamp NOT NULL
 );
 
 ALTER TABLE "parts" ADD FOREIGN KEY ("story_id") REFERENCES "stories" ("id");
