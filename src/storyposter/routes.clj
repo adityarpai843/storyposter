@@ -10,13 +10,14 @@
     (GET "/" [] "Hello World")
     (POST "/v1/user/login" request (create-user-handler request))
     (-> (context "/v1/story" []
-          (POST "/" request)
-          (PATCH "/:story-id" request)
+          (POST "/" request (s/create-story-handler request))
+          (PATCH "/:story-id" request (s/update-story-fields-handler request))
           (PATCH "/:story-id/part/:part-id" request)
           (DELETE "/:story-id" request)
           (DELETE "/:story-id/part/:part-id" request))
         (wrap-routes middleware/user-authenticated))
     (-> (context "/v1/user" []
+          (GET "/stories/:story-id" request)
           (GET "/stories" request)
           (PUT "/story/:story-id/part/:part-id" request))
         (wrap-routes middleware/user-authenticated))))

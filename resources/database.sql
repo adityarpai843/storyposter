@@ -1,11 +1,9 @@
-CREATE TYPE status as ENUM ('notstarted','inprogress','done');
-
 CREATE TABLE "parts" (
-  "id" serial PRIMARY KEY,
-  "story_id" integer,
-  "current_status" status,
+  "id" varchar PRIMARY KEY,
+  "story_id" varchar NOT NULL,
+  "read" boolean,
   "header" varchar,
-  "body" varchar,
+  "body" varchar NOT NULL,
   "created_at" timestamp
 );
 
@@ -18,9 +16,9 @@ CREATE TABLE "users" (
 );
 
 CREATE TABLE "stories" (
-  "id" serial PRIMARY KEY,
+  "id" varchar PRIMARY KEY,
   "title" varchar NOT NULL,
-  "status" status,
+  "read" boolean,
   "user_id" integer,
   "created_by" integer NOT NULL,
   "created_at" timestamp NOT NULL

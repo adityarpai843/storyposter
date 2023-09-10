@@ -1,15 +1,23 @@
 (ns storyposter.utils.middleware
-    (:require [storyposter.utils.db :as db]
-              [ring.util.response :as r]
-              [storyposter.utils.status :refer [unauthorized]]))
+    (:require [storyposter.utils.status :refer [unauthorized]]
+              [storyposter.utils.db :as db]))
+
+;TODO Debug handler for user-exist and not exist cases
+(defn get-user-data-handler
+  "Check whether user exists or not"
+  [request api_key]
+  (let [user-details (array-map :id         3
+                                :username   "Tim")
+        db-data  (db/get-user-data api_key)]
+    (if (empty? user-details)
+      (unauthorized)
+      (assoc request :user-data user-details))))
 
 (defn user-authenticated
-  "Middleware that checks whether user is authenticated"
+  "auth"
   [handler]
   (fn [request]
-    (let [api-key      (get-in request [:headers :x-api-key])
-          user-exists? (db/check-user-existence? "1234578")]
-      (println "api-key" api-key)
-      (if user-exists?
-        (handler request)
-        (unauthorized)))))
+    (let [headers (:headers request)
+          api-key (get headers "x-api-key")]
+      (handler (get-user-data-handler request api-key)))))
+
