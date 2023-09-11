@@ -1,5 +1,6 @@
 (ns storyposter.routes
   (:require [compojure.core :refer :all]
+            [compojure.route :as route]
             [storyposter.stories.story :as s]
             [storyposter.utils.middleware :as middleware]
             [storyposter.users.user :refer [create-user-handler]]))
@@ -20,4 +21,5 @@
           (GET "/stories/:story-id" request)
           (GET "/stories" request)
           (PUT "/story/:story-id/part/:part-id" request))
-        (wrap-routes middleware/user-authenticated))))
+        (wrap-routes middleware/user-authenticated))
+    (route/not-found "No route found!!")))

@@ -6,8 +6,8 @@
 (defn get-user-data-handler
   "Check whether user exists or not"
   [request api_key]
-  (let [user-details (array-map :id         3
-                                :username   "Tim")
+  (let [user-details (array-map :id         4
+                                :username   "Jim")
         db-data  (db/get-user-data api_key)]
     (if (empty? user-details)
       (unauthorized)

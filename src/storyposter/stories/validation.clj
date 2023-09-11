@@ -13,3 +13,8 @@
   {(s/required-key :title)  s/Str
    (s/required-key :read) s/Bool
    (s/required-key :parts)  [PartsSchema]})
+
+(s/defschema UpdateStorySchema
+  "Schema for partial updates"
+  {(s/optional-key :title) s/Str
+   (s/optional-key :read) s/Bool})

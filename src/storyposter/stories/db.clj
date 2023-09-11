@@ -38,3 +38,15 @@
     (t2/insert! :conn db-spec "parts" parts-db-data)
     (t2/insert! :conn db-spec "stories" story-db-data)
     story-db-data))
+
+(defn get-user-story-by-id
+  "Get story by id"
+  [story-id]
+  (let [story (t2/select-one :conn db-spec "stories" :id story-id)]
+    story))
+
+(defn update-story-columns
+  "Update columns of the story"
+  [body user-details]
+
+  )
