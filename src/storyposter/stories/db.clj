@@ -43,12 +43,7 @@
 (defn get-user-story-by-id
   "Get story by id"
   [story-id]
-  (let [story {:id "10983874-9bdc-4755-8e78-d37d1654b5d4",
-               :title "The Boy Who Cried Wolf",
-               :read false,
-               :created_by 3,
-               :created_at "#object[java.time.LocalDateTime 0x62e45052 2023-09-10T21:50:14]"}]
-
+  (let [story (t2/select-one :conn db-spec "stories" :id story-id)]
     story))
 
 ;(t2/select-one :conn db-spec "stories" :id story-id)
