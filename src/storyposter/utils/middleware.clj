@@ -2,12 +2,12 @@
     (:require [storyposter.utils.status :refer [unauthorized]]
               [storyposter.utils.db :as db]))
 
-;TODO Debug handler for user-exist and not exist cases
+;TODO Use query for user fetch and not exist cases
 (defn get-user-data-handler
   "Check whether user exists or not"
   [request api_key]
-  (let [user-details (array-map :id         4
-                                :username   "Jim")
+  (let [user-details (array-map :id         3
+                                :username   "Tim")
         db-data  (db/get-user-data api_key)]
     (if (empty? user-details)
       (unauthorized)
@@ -20,4 +20,3 @@
     (let [headers (:headers request)
           api-key (get headers "x-api-key")]
       (handler (get-user-data-handler request api-key)))))
-

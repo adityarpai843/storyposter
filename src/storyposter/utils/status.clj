@@ -24,6 +24,12 @@
   {:status 204
    :body   body})
 
+(defn forbidden
+  "Forbidden status"
+  [body]
+  {:status 403
+   :body   body})
+
 (defn unauthorized
   "Denotes 401 unauthorized"
   []

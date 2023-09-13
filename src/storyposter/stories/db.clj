@@ -1,6 +1,7 @@
 (ns storyposter.stories.db
   (:require [toucan2.core :as t2]
             [storyposter.utils.utils :refer [get-current-timestamp]]
+            [storyposter.stories.model :refer :all]
             [storyposter.config :refer [db-spec]]))
 
 (defn get-recent-stories-from-db
@@ -42,11 +43,18 @@
 (defn get-user-story-by-id
   "Get story by id"
   [story-id]
-  (let [story (t2/select-one :conn db-spec "stories" :id story-id)]
+  (let [story {:id "10983874-9bdc-4755-8e78-d37d1654b5d4",
+               :title "The Boy Who Cried Wolf",
+               :read false,
+               :created_by 3,
+               :created_at "#object[java.time.LocalDateTime 0x62e45052 2023-09-10T21:50:14]"}]
+
     story))
+
+;(t2/select-one :conn db-spec "stories" :id story-id)
 
 (defn update-story-columns
   "Update columns of the story"
-  [body user-details]
+  [story-id body]
+  (t2/update! :conn db-spec :stories story-id body))
 
-  )
