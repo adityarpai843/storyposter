@@ -18,10 +18,10 @@
   {:status 400
    :body   body})
 
-(defn no-content
-  "Denotes 204 status"
+(defn not-found
+  "Denotes 404 status"
   [body]
-  {:status 204
+  {:status 404
    :body   body})
 
 (defn forbidden
@@ -35,3 +35,9 @@
   []
   {:status 401
    :body {:error "User Unauthorized"}})
+
+(defn accepted
+  "Denotes a 202 status"
+  [body]
+  {:status 202
+   :body body})

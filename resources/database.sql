@@ -19,11 +19,11 @@ CREATE TABLE "stories" (
   "id" varchar PRIMARY KEY,
   "title" varchar NOT NULL,
   "read" boolean,
-  "user_id" integer,
+  "uid" integer,
   "created_by" integer NOT NULL,
   "created_at" timestamp NOT NULL
 );
 
 ALTER TABLE "parts" ADD FOREIGN KEY ("story_id") REFERENCES "stories" ("id");
 
-ALTER TABLE "stories" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "stories" ADD FOREIGN KEY ("uid") REFERENCES "users" ("id");

@@ -2,6 +2,7 @@
   (:require [buddy.core.codecs :refer :all]
             [storyposter.config :refer [db-spec]]
             [buddy.core.hash :as hash]
+            [storyposter.utils.db :as db]
             [storyposter.utils.utils :refer [get-current-timestamp]]
             [toucan2.core :as t2]))
 
@@ -20,3 +21,14 @@
                     (update :password create-hashed-password))]
     (t2/insert! :conn db-spec "users" db-data)
     (:api-key db-data)))
+
+(defn mark-story
+  "Mark story as read or unread"
+  [{:keys [read]} story-id user-details]
+  (let [story (db/get-user-story-by-id story-id)
+        user-id (:id user-details)
+        updated-story (-> story
+                          (assoc :id (.toString (java.util.UUID/randomUUID)))
+                          (assoc :read read)
+                          (assoc :uid user-id))]
+    (t2/insert! :conn db-spec "stories" updated-story)))

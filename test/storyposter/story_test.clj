@@ -31,7 +31,7 @@
                 :body (:body response)}))))))
 
 (deftest story-field-update-test
-  (let [mock-request (mock/request :patch "http://localhost:3000/v1/story/d9717ffa-0be1-4e06-a38e-a386b61177f4")]
+  (let [mock-request (mock/request :patch "http://localhost:3000/v1/story/d054a229-ede1-4afd-be57-794d9db0b7a2")]
     (testing "Update with both fields"
       (let [response (update-story-fields-handler (-> mock-request
                                                       (assoc :user-data {:id         3
@@ -49,4 +49,14 @@
 
         (is (= response
                {:status 403
-                :body {:error "Operation Forbidden"}}))))))
+                :body {:error "Operation Forbidden"}}))))
+
+    (testing "Trying to update a story that is not in the db"
+      (let [response (update-story-fields-handler (-> mock-request
+                                                      (assoc :user-data {:id         3
+                                                                         :username   "Tim"})
+                                                      (assoc :body {:title "Mock ary"})))]
+
+        (is (= response
+               {:status 404
+                :body "story not found"}))))))

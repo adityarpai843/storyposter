@@ -1,7 +1,6 @@
 (ns storyposter.stories.db
   (:require [toucan2.core :as t2]
             [storyposter.utils.utils :refer [get-current-timestamp]]
-            [storyposter.stories.model :refer :all]
             [storyposter.config :refer [db-spec]]))
 
 (defn get-recent-stories-from-db
@@ -40,16 +39,14 @@
     (t2/insert! :conn db-spec "stories" story-db-data)
     story-db-data))
 
-(defn get-user-story-by-id
-  "Get story by id"
-  [story-id]
-  (let [story (t2/select-one :conn db-spec "stories" :id story-id)]
-    story))
-
-;(t2/select-one :conn db-spec "stories" :id story-id)
 
 (defn update-story-columns
   "Update columns of the story"
   [story-id body]
   (t2/update! :conn db-spec :stories story-id body))
+
+(defn delete-story
+  "Delete a whole story given id"
+  [story-id]
+  (t2/delete! :conn db-spec :stories :id story-id))
 

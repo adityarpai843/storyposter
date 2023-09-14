@@ -1,8 +1,12 @@
 (ns storyposter.stories.story
   (:require [schema.core :as s]
             [storyposter.stories.db :as db]
+            [storyposter.utils.db :as udb]
+            [storyposter.config :refer [db-spec]]
+            [toucan2.core :as t2]
             [storyposter.stories.validation :as v]
-            [storyposter.utils.status :refer [success created bad-request forbidden]]))
+            [storyposter.utils.status :refer [success created bad-request forbidden not-found
+                                              accepted]]))
 
 (defn get-recent-stories
   "Get recent stories or return no stories"
@@ -26,11 +30,11 @@
 (defn update-fields
   "Update the DB column if user owns the story"
   [story-id user-details body]
-  (let [story (db/get-user-story-by-id story-id)]
+  (let [story (udb/get-user-story-by-id story-id)]
     (if (= (:created_by story) (:id user-details))
       (do
         (db/update-story-columns story-id body)
-        (success "Story created"))
+        (success "title updated"))
       (forbidden {:error "Operation Forbidden"}))))
 
 (defn update-story-fields-handler
@@ -39,7 +43,23 @@
   (let [body (:body request)
         story-id (get-in request [:params :story-id])
         user-details (:user-data request)]
-    (if (or (contains? body :title) (contains? body :read))
-      (update-fields story-id user-details body)
-      (bad-request {:error "Only title or read can be updated"}))))
+    (if (t2/exists? :conn db-spec :stories :id story-id)
+      (if (contains? body :title)
+        (update-fields story-id user-details body)
+        (bad-request {:error "Only title can be updated"}))
+      (not-found "story not found"))))
+
+(defn delete-story-by-id-handler
+  "Delete a specific story created by that user"
+  [request]
+  (let [story-id (get-in request [:params :story-id])
+        user-details (:user-data request)]
+    (if (t2/exists? :conn db-spec :stories :id story-id)
+      (let [story (udb/get-user-story-by-id story-id)]
+        (if (= (:created_by story) (:id user-details))
+          (do
+            (db/delete-story story-id)
+            (accepted "Story Deleted Successfully"))
+          (forbidden {:error "Operation Forbidden"})))
+      (not-found "story not found"))))
 
