@@ -14,7 +14,8 @@
    (s/required-key :read)   s/Bool
    (s/required-key :parts)  [PartsSchema]})
 
-(s/defschema UpdateStorySchema
-  "Schema for partial updates"
-  {(s/optional-key :title) s/Str
-   (s/optional-key :read)  s/Bool})
+(s/defschema UpdatePartsSchema
+  "Schema for user story Parts data"
+  {(s/optional-key :header)    s/Str
+   (s/required-key :story-id)  s/Str
+   (s/required-key :body)      s/Str})

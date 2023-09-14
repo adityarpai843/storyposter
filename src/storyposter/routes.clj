@@ -13,9 +13,9 @@
     (-> (context "/v1/story" []
           (POST "/" request (s/create-story-handler request))
           (PATCH "/:story-id" request (s/update-story-fields-handler request))
-          (PATCH "/:story-id/part/:part-id" request)
+          (PUT "/part/:part-id" request (s/update-parts-handler request))
           (DELETE "/:story-id" request (s/delete-story-by-id-handler request))
-          (DELETE "/:story-id/part/:part-id" request))
+          (DELETE "/part/:part-id" request))
         (wrap-routes middleware/user-authenticated))
     (-> (context "/v1/user" []
           (PATCH "/stories/:story-id" request (u/mark-story-read request))

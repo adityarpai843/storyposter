@@ -63,3 +63,25 @@
           (forbidden {:error "Operation Forbidden"})))
       (not-found "story not found"))))
 
+(defn update-story
+  "Update a specific story created by that user"
+  [part-id body]
+  (db/update-story part-id body))
+
+(defn update-parts-handler
+  "Handler for update story"
+  [request]
+  (let [part-id (get-in request [:params :part-id])
+        user-details (:user-data request)
+        body (:body request)
+        story (udb/get-user-story-by-id (:story-id body))
+        validate-schema (s/check v/UpdatePartsSchema body)]
+    (if (t2/exists? :conn db-spec :parts :id part-id)
+      (if (not validate-schema)
+        (if (= (:id user-details) (:created_by story))
+          (do
+            (update-story part-id body)
+            (success "Part updated successfully"))
+          (forbidden {:error "Operation Forbidden"}))
+        (bad-request {:error (str "Field" (keys validate-schema) (vals validate-schema))}))
+      (not-found "Part not found"))))

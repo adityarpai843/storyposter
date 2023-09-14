@@ -48,5 +48,10 @@
 (defn delete-story
   "Delete a whole story given id"
   [story-id]
-  (t2/delete! :conn db-spec :stories :id story-id))
+  (t2/delete! :conn db-spec :stories :id story-id)
+  (t2/delete! :conn db-spec :parts :story-id story-id))
 
+(defn update-story
+  "Update whole story"
+  [part-id body]
+  (t2/update! :conn db-spec :parts :id part-id body))
