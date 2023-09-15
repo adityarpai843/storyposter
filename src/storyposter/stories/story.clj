@@ -85,3 +85,13 @@
           (forbidden {:error "Operation Forbidden"}))
         (bad-request {:error (str "Field" (keys validate-schema) (vals validate-schema))}))
       (not-found "Part not found"))))
+
+(defn delete-part
+  "Delete a specific part in a story"
+  [request]
+  (let [part-id (get-in request [:params :part-id])]
+    (if (t2/exists? :conn db-spec :parts :id part-id)
+      (do
+        (db/delete-part part-id)
+        (accepted "Part Deleted successfully"))
+      (not-found "Part not found"))))

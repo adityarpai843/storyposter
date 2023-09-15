@@ -32,3 +32,24 @@
                           (assoc :read read)
                           (assoc :uid user-id))]
     (t2/insert! :conn db-spec "stories" updated-story)))
+
+(defn get-story-to-read
+  "Gets story from DB for the user to start reading"
+  [story user-id]
+  (let [updated-story (-> story
+                          (assoc :id (.toString (java.util.UUID/randomUUID)))
+                          (assoc :uid user-id))
+        parts (t2/select :conn db-spec :parts :story-id (:id story))
+        updated-parts (map (fn [part]
+                             (-> part
+                                 (assoc :id (.toString (java.util.UUID/randomUUID)))
+                                 (assoc :story_id (:id updated-story)))
+                             )parts)]
+    (t2/insert! :conn db-spec :parts updated-parts)
+    (t2/insert! :conn db-spec :stories updated-story)
+    (t2/select :conn db-spec :stories {:select   [:stories.id
+                                                  :stories.title
+                                                  :parts.body]
+                                       :from     [:stories]
+                                       :left-join [:parts [:= :parts.story-id :stories.id]]
+                                       :where    [:and [:= :stories.id (:id updated-story)] [:= :stories.uid user-id]]})))

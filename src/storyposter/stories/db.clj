@@ -11,7 +11,8 @@
                                                  :parts.body]
                                       :from     [:stories]
                                       :join     [:parts [:= :stories.id :parts.story_id]]
-                                                 :order-by [:stories.created-at]}))
+                                                 :order-by [:stories.created-at]
+                                      :where    [:= :stories.uid]}))
 
 (defn user-parts-db-data
   "Creates user story parts"
@@ -55,3 +56,8 @@
   "Update whole story"
   [part-id body]
   (t2/update! :conn db-spec :parts :id part-id body))
+
+(defn delete-part
+  "Deletes a part of story"
+  [part-id]
+  (t2/delete! :conn db-spec :parts :id part-id))
