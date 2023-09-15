@@ -53,3 +53,11 @@
                                        :from     [:stories]
                                        :left-join [:parts [:= :parts.story-id :stories.id]]
                                        :where    [:and [:= :stories.id (:id updated-story)] [:= :stories.uid user-id]]})))
+
+(defn get-stories-to-read
+  "Gets stories for the user to continue reading"
+  [{:keys [id]}]
+  (t2/select :conn db-spec :stories {:select [:stories.id
+                                              :stories.title]
+                                     :from [:stories]
+                                     :where [:and [:= :stories.uid id] [:= :stories.read false]]}))

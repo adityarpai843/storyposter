@@ -43,3 +43,10 @@
     (if (t2/exists? :conn db-spec :stories :id story-id)
       (success (get-story story-id user-details))
       (not-found "Story not found"))))
+
+(defn get-stories-to-continue
+  "Handler for stories to continue reading"
+  [request]
+  (let [user-data (:user-data request)
+        stories (db/get-stories-to-read user-data)]
+    (success stories)))
