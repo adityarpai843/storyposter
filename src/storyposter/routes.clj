@@ -21,6 +21,6 @@
           (PATCH "/stories/:story-id" request (u/mark-story-read request))
           (GET "/story/:story-id" request (u/get-story-handler request))
           (GET "/stories" request (u/get-stories-to-continue request))
-          (PUT "/story/:story-id/part/:part-id" request))
+          (PATCH "/story/part/:part-id" request (u/mark-part-as-read request)))
         (wrap-routes middleware/user-authenticated))
     (route/not-found "No route found!!")))

@@ -9,3 +9,7 @@
 (s/defschema StoryUpdate
   "Schema for user story read status toggle"
   {(s/required-key :read) s/Bool})
+
+(s/defschema PartRead
+  "Schema for user story read status toggle"
+  {(s/required-key :read) s/Bool})

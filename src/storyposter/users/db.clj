@@ -61,3 +61,7 @@
                                               :stories.title]
                                      :from [:stories]
                                      :where [:and [:= :stories.uid id] [:= :stories.read false]]}))
+(defn mark-part-read
+  "Mark part as read"
+  [part-id body]
+  (t2/update! :conn db-spec :parts :id part-id body))

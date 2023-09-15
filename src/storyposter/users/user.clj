@@ -5,7 +5,7 @@
             [storyposter.config :refer [db-spec]]
             [schema.core :as s]
             [storyposter.utils.status :refer [created bad-request success not-found]]
-            [storyposter.users.validation :refer [UserSchema StoryUpdate]]))
+            [storyposter.users.validation :refer [UserSchema StoryUpdate PartRead]]))
 (defn create-user-handler
   "Handler for creating a user and returning API key"
   [{:keys [body]}]
@@ -37,8 +37,7 @@
 (defn get-story-handler
   "Handler for get story endpoint"
   [request]
-  (let [body  (:body request)
-        story-id (get-in request [:params :story-id])
+  (let [story-id (get-in request [:params :story-id])
         user-details (:user-data request)]
     (if (t2/exists? :conn db-spec :stories :id story-id)
       (success (get-story story-id user-details))
@@ -50,3 +49,17 @@
   (let [user-data (:user-data request)
         stories (db/get-stories-to-read user-data)]
     (success stories)))
+
+(defn mark-part-as-read
+  "Handler for marking part as read"
+  [request]
+  (let [part-id (get-in request [:params :part-id])
+        body (:body request)
+        validate-schema (s/check PartRead body)]
+    (if (t2/exists? :conn db-spec :id part-id)
+      (if (not validate-schema)
+        (do
+          (db/mark-part-read part-id body)
+          (success "Success"))
+        (bad-request {:error (str "Field" (keys validate-schema) (vals validate-schema))}))
+      (not-found "Part not found"))))
